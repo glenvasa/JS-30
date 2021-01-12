@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Understanding JavaScript's Capture</title>
+  </head>
+  <body class="bod">
+    <div class="one">
+      <div class="two">
+        <div class="three"></div>
+      </div>
+    </div>
+
+    <style>
+      html {
+        box-sizing: border-box;
+      }
+
+      *,
+      *:before,
+      *:after {
+        box-sizing: inherit;
+      }
+
+      div {
+        width: 100%;
+        padding: 100px;
+      }
+
+      .one {
+        background: thistle;
+      }
+
+      .two {
+        background: mistyrose;
+      }
+
+      .three {
+        background: coral;
+      }
+    </style>
+
+    <button></button>
+    <script>
+      const divs = document.querySelectorAll("div");
+
+      function logText(e) {
+        console.log(this.classList.value);
+        // stops the events from bubbling up
+        // e.stopPropagation();
+      }
+
+      divs.forEach((div) =>
+        // if you set capture: true, logText fn doesn't get run on the bubble up any longer
+        // instead it fires on the capture down.
+        // normally in js, the capture is first which starts at the top element and goes down, just to first determine
+        // which elements were clicked on, before actually firing the events on those elements,
+        // from bottom up, on the bubble up)
+        div.addEventListener("click", logText, {
+          capture: false,
+          // once: true is same as div.removeEventListener('click', logText)
+          // as soon as first 'click' occurs, the event listener unbinds
+          once: true,
+        })
+      );
+    </script>
+  </body>
+</html>
